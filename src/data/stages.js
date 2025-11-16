@@ -14,7 +14,6 @@ export const stages = {
       type: 'image',
       src: '1.JPG' // 圖片文件名，實際路徑在組件中處理
     },
-    component: 'Stage1', // 指定使用 Stage1 組件
     choices: [
       {
         text: '從台灣出發',
@@ -45,6 +44,10 @@ export const stages = {
     id: '2',
     title: '抵達尼斯',
     content: '你終於抵達了尼斯。這是一個美麗的城市。',
+    media: {
+      type: 'image',
+      src: '2.JPG'
+    },
     choices: [
       {
         text: '繼續',

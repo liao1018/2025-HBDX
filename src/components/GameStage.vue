@@ -2,7 +2,6 @@
 import { computed, defineAsyncComponent } from 'vue'
 import { getStage } from '../data/stages.js'
 import StageDefault from './stages/StageDefault.vue'
-import Stage1 from './stages/Stage1.vue'
 
 const props = defineProps({
   stageId: {
@@ -26,18 +25,14 @@ const stageComponent = computed(() => {
     // Vite 支持動態導入，但需要明確的路徑
     return defineAsyncComponent(() => {
       const componentName = stage.value.component
-      // 使用明確的導入路徑
-      if (componentName === 'Stage1') {
-        return import('./stages/Stage1.vue')
-      }
       // 可以繼續添加其他關卡組件
       // 如果找不到對應組件，返回預設組件
       return Promise.resolve(StageDefault)
     })
   }
   
-  // 否則使用預設組件（通用架構，以 Stage1 為預設）
-  return Stage1
+  // 否則使用預設組件（通用架構）
+  return StageDefault
 })
 </script>
 
