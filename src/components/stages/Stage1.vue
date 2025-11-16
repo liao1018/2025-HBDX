@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed, watch, nextTick } from 'vue'
 import { getStage } from '../../data/stages.js'
 import ChoiceButton from '../ChoiceButton.vue'
 import fallbackImage from '../../assets/images/1.JPG'
@@ -13,7 +13,7 @@ const props = defineProps({
 
 const emit = defineEmits(['choice-selected'])
 
-const stage = getStage(props.stageId)
+const stage = computed(() => getStage(props.stageId))
 
 // 產生媒體來源（支援檔名或完整 URL）
 const buildMediaUrl = (filename) => {
@@ -31,7 +31,7 @@ const buildMediaUrl = (filename) => {
 // 動畫狀態
 const imageSlideIn = ref(false)    // 圖片滑入
 const showContent = ref(false)     // 內容/按鈕淡入
-const mediaSrc = ref(buildMediaUrl(stage?.media?.src))
+const mediaSrc = ref(buildMediaUrl(stage.value?.media?.src))
 
 // 事件
 const handleChoice = (nextStageId) => {
@@ -48,6 +48,23 @@ onMounted(() => {
     showContent.value = true
   }, 1000)
 })
+
+// 當 stageId 變更時，更新媒體並重置動畫
+watch(
+  () => props.stageId,
+  async () => {
+    imageSlideIn.value = false
+    showContent.value = false
+    mediaSrc.value = buildMediaUrl(stage.value?.media?.src)
+    await nextTick()
+    setTimeout(() => {
+      imageSlideIn.value = true
+    }, 50)
+    setTimeout(() => {
+      showContent.value = true
+    }, 1000)
+  }
+)
 </script>
 
 <template>
