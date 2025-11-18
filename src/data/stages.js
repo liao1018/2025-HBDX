@@ -44,10 +44,6 @@ export const stages = {
     id: '2',
     title: '抵達尼斯',
     content: '你終於抵達了尼斯。這是一個美麗的城市。',
-    media: {
-      type: 'image',
-      src: '2.JPG'
-    },
     choices: [
       {
         text: '繼續',

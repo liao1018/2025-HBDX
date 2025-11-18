@@ -2,7 +2,7 @@
 import { ref, onMounted, computed, watch, nextTick } from 'vue'
 import { getStage } from '../../data/stages.js'
 import ChoiceButton from '../ChoiceButton.vue'
-import fallbackImage from '../../assets/images/1.JPG'
+import fallbackImage from '../../assets/images/default.JPG'
 
 const props = defineProps({
   stageId: {
