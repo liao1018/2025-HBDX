@@ -62,10 +62,6 @@ export const stages = {
     title: '抵達巴黎',
     content: '你終於抵達了巴黎。這是一個美麗的城市。',
     choices: [
-      {
-        text: '繼續',
-        nextStage: '4'
-      }
     ]
   },
 }

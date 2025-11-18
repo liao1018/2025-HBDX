@@ -1,5 +1,5 @@
 <script setup>
-import { computed, defineAsyncComponent } from 'vue'
+import { computed, defineAsyncComponent, ref, watch } from 'vue'
 import { getStage } from '../data/stages.js'
 import StageDefault from './stages/StageDefault.vue'
 
@@ -12,39 +12,97 @@ const props = defineProps({
 
 const emit = defineEmits(['choice-selected'])
 
-// 獲取當前關卡數據
-const stage = computed(() => getStage(props.stageId))
+// 頁面歷史記錄：記錄訪問過的頁面順序
+const pageHistory = ref([props.stageId])
 
-// 動態加載關卡組件
-const stageComponent = computed(() => {
-  if (!stage.value) return null
-  
-  // 如果關卡指定了專屬組件，則使用該組件
-  if (stage.value.component) {
-    // 動態導入對應的關卡組件
-    // Vite 支持動態導入，但需要明確的路徑
+// 當 stageId 改變時，更新歷史記錄
+watch(
+  () => props.stageId,
+  (newId) => {
+    // 如果新頁面不在歷史記錄中，添加到末尾
+    if (!pageHistory.value.includes(newId)) {
+      pageHistory.value.push(newId)
+    }
+    // 如果新頁面在歷史記錄中但不是最後一個，移除它並添加到末尾
+    else {
+      const index = pageHistory.value.indexOf(newId)
+      if (index !== pageHistory.value.length - 1) {
+        pageHistory.value.splice(index, 1)
+        pageHistory.value.push(newId)
+      }
+    }
+  }
+)
+
+// 獲取當前關卡數據
+const currentStage = computed(() => getStage(props.stageId))
+
+// 獲取當前關卡所有可能的下一頁（從 choices 中提取）
+const nextStageIds = computed(() => {
+  if (!currentStage.value?.choices) return []
+  // 去重，避免重複的下一頁
+  return [...new Set(currentStage.value.choices.map(choice => choice.nextStage))]
+})
+
+// 構建要渲染的頁面列表：歷史記錄中的頁面 + 所有可能的下一頁
+// 順序：歷史記錄中的頁面（按訪問順序），然後是所有可能的下一頁
+const visibleStageIds = computed(() => {
+  const list = [...pageHistory.value]
+  // 添加所有可能的下一頁（如果還沒在列表中）
+  nextStageIds.value.forEach(id => {
+    if (!list.includes(id)) {
+      list.push(id)
+    }
+  })
+  return list
+})
+
+// 計算當前頁在可見列表中的索引（用於 translateY）
+const currentIndex = computed(() => {
+  return visibleStageIds.value.indexOf(props.stageId)
+})
+
+// 取得某關卡對應組件（支援自訂 component，否則預設）
+const getStageComponent = (stageId) => {
+  const s = getStage(stageId)
+  if (s?.component) {
     return defineAsyncComponent(() => {
-      const componentName = stage.value.component
-      // 可以繼續添加其他關卡組件
-      // 如果找不到對應組件，返回預設組件
+      // 目前尚無其他專屬組件映射，預留擴充點
       return Promise.resolve(StageDefault)
     })
   }
-  
-  // 否則使用預設組件（通用架構）
   return StageDefault
-})
+}
+
+// 處理選項選擇
+const handleChoiceSelected = (nextStageId) => {
+  emit('choice-selected', nextStageId)
+}
 </script>
 
 <template>
-  <component 
-    v-if="stage"
-    :is="stageComponent"
-    :stage-id="stageId"
-    @choice-selected="(nextStageId) => $emit('choice-selected', nextStageId)"
-  />
-  <div v-else class="min-h-screen flex items-center justify-center">
-    <p class="text-gray-500">關卡不存在</p>
+  <div class="relative h-screen overflow-hidden bg-white">
+    <!-- 只渲染當前頁和可能的下一頁，通過 translateY 控制顯示位置 -->
+    <div
+      class="relative transition-transform duration-700 ease-out"
+      :style="{
+        transform: `translateY(-${currentIndex * 100}vh)`
+      }"
+    >
+      <!-- 只渲染可見的關卡：當前頁 + 所有可能的下一頁 -->
+      <div
+        v-for="stageId in visibleStageIds"
+        :key="stageId"
+        class="relative"
+        :style="{ height: '100vh' }"
+      >
+        <component
+          :is="getStageComponent(stageId)"
+          :stage-id="stageId"
+          @choice-selected="handleChoiceSelected"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
