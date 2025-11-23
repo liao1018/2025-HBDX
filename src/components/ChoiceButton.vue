@@ -12,7 +12,7 @@ defineEmits(['click'])
 <template>
   <button
     @click="$emit('click')"
-    class="w-full px-6 py-4 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors duration-200 active:bg-blue-700"
+    class="w-full px-6 py-3 bg-[#008aae] hover:bg-[#007a9a] text-sm text-white font-medium rounded-lg transition-colors duration-200 active:bg-[#006a85]"
   >
     {{ text }}
   </button>

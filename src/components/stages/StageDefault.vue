@@ -91,19 +91,19 @@ watch(
           :class="showContent ? 'opacity-100' : 'opacity-0'"
         >
           <!-- 關卡標題 -->
-          <h1 class="text-3xl font-bold text-gray-800 mb-4 text-center">
+          <h1 class="bg-white/95 backdrop-blur rounded-lg shadow-lg p-6 mb-2 text-lg font-bold text-gray-800 text-center">
             {{ stage?.title }}
           </h1>
 
           <!-- 關卡內容 -->
-          <div class="bg-white/95 backdrop-blur rounded-lg shadow-lg p-6 mb-6">
-            <p class="text-lg text-gray-700 leading-relaxed whitespace-pre-line">
+          <div class="bg-white/95 backdrop-blur rounded-lg shadow-lg p-6 mb-2">
+            <p class="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
               {{ stage?.content }}
             </p>
           </div>
 
           <!-- 選項按鈕 -->
-          <div class="space-y-4">
+          <div class="flex gap-2">
             <ChoiceButton
               v-for="(choice, index) in stage?.choices"
               :key="index"
