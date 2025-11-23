@@ -17,20 +17,23 @@ export const stages = {
     choices: [
       {
         text: '獨自前往',
-        nextStage: '2'
+        nextStage: '1.1'
       },
       {
         text: '有男朋友的陪伴',
-        nextStage: '1.1'
+        nextStage: '2'
       }
     ]
   },
 
-  // 支線 1.1 - 機場附近逛逛
   '1.1': {
     id: '1.1',
-    title: '前往西雅圖',
-    content: '請問你想從哪裡前往西雅圖？',
+    title: '妳決定獨自前往',
+    content: '不過上了飛機，妳發現男友坐在妳旁邊。他希望可以一起去，希望可以跟妳一起完成這個旅程。他覺得一切一定都會很好玩，也希望妳在遙遠的地方至少有個人可以依靠。(妳選錯選項了)',
+    media: {
+      type: 'image',
+      src: '1.1.JPG'
+    },
     choices: [
       {
         text: '前往法國',
