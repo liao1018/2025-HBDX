@@ -16,25 +16,63 @@ const emit = defineEmits(['choice-selected'])
 const stage = computed(() => getStage(props.stageId))
 
 // 產生媒體來源（支援檔名或完整 URL）
-const buildMediaUrl = (filename) => {
-  if (!filename) return fallbackImage
+const buildMediaUrl = (filename, mediaType = 'image') => {
+  if (!filename) return mediaType === 'video' ? null : fallbackImage
   if (typeof filename === 'string' && (filename.startsWith('http') || filename.startsWith('/'))) {
     return filename
   }
   try {
-    return new URL(`../../assets/images/${filename}`, import.meta.url).href
+    const folder = mediaType === 'video' ? 'videos' : 'images'
+    return new URL(`../../assets/${folder}/${filename}`, import.meta.url).href
   } catch {
-    return fallbackImage
+    return mediaType === 'video' ? null : fallbackImage
   }
 }
 
 // 動畫狀態
 const imageSlideIn = ref(false)    // 圖片滑入
 const showContent = ref(false)     // 內容/按鈕淡入
-const mediaSrc = ref(buildMediaUrl(stage.value?.media?.src))
+const mediaType = computed(() => stage.value?.media?.type || 'image')
+const mediaSrc = ref(buildMediaUrl(stage.value?.media?.src, mediaType.value))
+const videoRef = ref(null)
+
+// 嘗試播放視頻
+const tryPlayVideo = async () => {
+  if (!videoRef.value || mediaType.value !== 'video') {
+    return
+  }
+  
+  try {
+    // 確保視頻已靜音
+    videoRef.value.muted = true
+    videoRef.value.volume = 0
+    
+    // 檢查視頻是否已加載足夠的數據
+    if (videoRef.value.readyState >= 2) { // HAVE_CURRENT_DATA
+      await videoRef.value.play()
+    } else {
+      // 如果還沒準備好，等待一下再試
+      videoRef.value.addEventListener('canplay', async () => {
+        try {
+          await videoRef.value.play()
+        } catch (e) {
+          console.warn('Video play after canplay failed:', e.message)
+        }
+      }, { once: true })
+    }
+  } catch (error) {
+    // 如果自動播放失敗，記錄但不中斷（瀏覽器限制）
+    console.warn('Video autoplay failed:', error.message)
+    // 如果錯誤是因為用戶未交互，在用戶點擊時會重試
+  }
+}
 
 // 事件
 const handleChoice = (nextStageId) => {
+  // 在用戶交互時嘗試播放視頻（如果之前失敗）
+  if (videoRef.value && mediaType.value === 'video') {
+    tryPlayVideo()
+  }
   emit('choice-selected', nextStageId)
 }
 
@@ -45,6 +83,10 @@ onMounted(() => {
   }, 50)
   setTimeout(() => {
     showContent.value = true
+    // 嘗試播放視頻
+    if (mediaType.value === 'video') {
+      setTimeout(() => tryPlayVideo(), 100)
+    }
   }, 1000)
 })
 
@@ -54,7 +96,9 @@ watch(
   async () => {
     imageSlideIn.value = false
     showContent.value = false
-    mediaSrc.value = buildMediaUrl(stage.value?.media?.src)
+    mediaSrc.value = buildMediaUrl(stage.value?.media?.src, mediaType.value)
+    // 重置 videoRef，等待新元素创建
+    videoRef.value = null
     await nextTick()
     setTimeout(() => {
       imageSlideIn.value = true
@@ -62,6 +106,14 @@ watch(
     setTimeout(() => {
       showContent.value = true
     }, 1000)
+    // 等待视频元素创建后再尝试播放
+    if (mediaType.value === 'video') {
+      await nextTick()
+      // 多次尝试，确保视频元素已创建
+      setTimeout(() => tryPlayVideo(), 200)
+      setTimeout(() => tryPlayVideo(), 500)
+      setTimeout(() => tryPlayVideo(), 1000)
+    }
   }
 )
 </script>
@@ -77,10 +129,26 @@ watch(
           transition: 'transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
         }"
       >
+        <!-- 圖片 -->
         <img
+          v-if="mediaType === 'image'"
           :src="mediaSrc"
           :alt="stage?.title || '關卡圖片'"
           class="w-full h-full object-contain object-top pointer-events-none"
+        />
+        <!-- 影片 -->
+        <video
+          v-else-if="mediaType === 'video' && mediaSrc"
+          ref="videoRef"
+          :src="mediaSrc"
+          loop
+          muted
+          playsinline
+          preload="auto"
+          class="w-full h-full object-contain object-top pointer-events-none"
+          @loadedmetadata="tryPlayVideo"
+          @canplay="tryPlayVideo"
+          @loadeddata="tryPlayVideo"
         />
       </div>
 

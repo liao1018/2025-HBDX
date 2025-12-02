@@ -21,7 +21,7 @@ export const stages = {
       },
       {
         text: '有男朋友的陪伴',
-        nextStage: '2'
+        nextStage: '1.2'
       }
     ]
   },
@@ -36,7 +36,23 @@ export const stages = {
     },
     choices: [
       {
-        text: '前往法國',
+        text: '前往尼斯',
+        nextStage: '2'
+      }
+    ]
+  },
+
+  '1.2': {
+    id: '1.2',
+    title: '妳決定跟男友一起前往',
+    content: '他也很希望能夠跟你一起探索這個世界，一起出發吧！',
+    media: {
+      type: 'video',
+      src: '1.2.MP4'
+    },
+    choices: [
+      {
+        text: '前往尼斯',
         nextStage: '2'
       }
     ]
@@ -46,21 +62,96 @@ export const stages = {
   '2': {
     id: '2',
     title: '抵達尼斯',
-    content: '你終於抵達了尼斯。這是一個美麗的城市。',
+    content: '終於抵達了尼斯。真的到達法國的時候有一種不真實的感覺。到了尼斯第一件事妳想要做什麼呢？',
+    media: {
+      type: 'image',
+      src: '2.JPG'
+    },
     choices: [
       {
-        text: '繼續',
+        text: '馬塞納廣場',
+        nextStage: '2.1'
+      },
+      {
+        text: '先吃個海鮮大餐',
+        nextStage: '2.2'
+      },
+      {
+        text: '去海邊走走',
+        nextStage: '2.3'
+      },
+    ]
+  },
+
+  '2.1': {
+    id: '2.1',
+    title: '馬塞納廣場',
+    content: '你們終於來到了馬塞納廣場，這個是妳在看「離線找真愛」時經常看到的景點，讓妳有一種原來就是這裡啊！的感覺。',
+    media: {
+      type: 'image',
+      src: '2.1.JPG'
+    },
+    choices: [
+      {
+        text: '回飯店休息',
         nextStage: '3'
       }
     ]
   },
 
-  // 第3關 - 主線
+  '2.2': {
+    id: '2.2',
+    title: '吃個海鮮大餐',
+    content: '這是你們來到尼斯的第一餐，雖然價格很貴，但義大利麵份量超級大，海鮮也超級新鮮，你們吃的很開心！跟店員結帳的時候也因為要開始練習妳的法文，所以有些緊張。但最後還是完美地做到了！',
+    media: {
+      type: 'image',
+      src: '2.2.JPG'
+    },
+    choices: [
+      {
+        text: '回飯店休息',
+        nextStage: '3'
+      }
+    ]
+  },
+  '2.3': {
+    id: '2.3',
+    title: '去海邊走走',
+    content: '你們終於來到了海邊，這裡的海水超級藍，沙灘也很乾淨，你們在海邊坐著，看看日落！真的看到這一幕的時候，妳感覺到這就是妳出國的原因！',
+    media: {
+      type: 'image',
+      src: '2.3.JPG'
+    },
+    choices: [
+      {
+        text: '回飯店休息',
+        nextStage: '3'
+      }
+    ]
+  },
+
   '3': {
     id: '3',
-    title: '抵達巴黎',
-    content: '你終於抵達了巴黎。這是一個美麗的城市。',
+    title: '明天要去哪裡玩呢？',
+    content: '你們終於回到了飯店，你們洗了個澡，然後就睡覺了。明天要去哪裡玩呢？',
+    // TODO 選圖
+    media: {
+      type: 'image',
+      src: '3.JPG'
+    },
     choices: [
+      {
+        text: '去芒通',
+        nextStage: '4.1'
+      },
+      {
+        text: '去坎城',
+        nextStage: '4.2'
+      },
+      {
+        text: '逛逛老城區',
+        nextStage: '4.3'
+      }
     ]
   },
 }
