@@ -5,6 +5,23 @@
  */
 
 export const stages = {
+  // 第0關 - 起始關卡
+  0: {
+    id: "0",
+    title: "前言",
+    content:
+      "測試",
+    media: {
+      type: "image",
+      src: "1.JPG",
+    },
+    choices: [
+      {
+        text: "開始旅程",
+        nextStage: "1",
+      },
+    ],
+  },
   // 第1關 - 起始關卡
   1: {
     id: "1",
