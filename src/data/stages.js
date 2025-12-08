@@ -193,7 +193,8 @@ export const stages = {
   4: {
     id: "4",
     title: "前往下一站",
-    content: "你們可不是來玩的，你們回到住宿的地方吃泡麵，準備前往明天打工換宿的地點。請問你夢想中第一個打工換宿地點是哪裡呢？",
+    content:
+      "你們可不是來玩的，你們回到住宿的地方吃泡麵，準備前往明天打工換宿的地點。請問你夢想中第一個打工換宿地點是哪裡呢？",
     media: {
       type: "image",
       src: "4.JPG",
@@ -201,14 +202,148 @@ export const stages = {
     choices: [
       {
         text: "有很多綿羊的地方",
-        nextStage: "5",
+        nextStage: "4.1",
       },
       {
         text: "一個森林的小木屋(沒有廁所)",
+        nextStage: "4.2",
+      },
+    ],
+  },
+  4.1: {
+    id: "4.1",
+    title: "有很多綿羊的地方",
+    content:
+      "你們來到了有七隻綿羊的一個小農場，你們每天的第一個工作是擠羊奶。你覺得怎麼樣呢？",
+    media: {
+      type: "video",
+      src: "4.1.MP4",
+    },
+    choices: [
+      {
+        text: "回到 main house 看一下",
         nextStage: "5",
       },
     ],
   },
+  4.2: {
+    id: "4.2",
+    title: "住在小木屋",
+    content: "你們住的地方是一個小木屋，一進來的蚊子多到爆，而且沒有廁所，你覺得怎麼樣呢？",
+    media: {
+      type: "image",
+      src: "4.2.JPG",
+    },
+    choices: [
+      {
+        text: "回到 main house 看一下",
+        nextStage: "5",
+      },
+    ],
+  },
+  5: {
+    id: "5",
+    title: "main house",
+    content: "main house 的外面還是很漂亮，外面的吊床跟鞦韆也非常可愛。看起來是除了睡覺以外的時�間都可以在這裡度過。明天要開始工作了，妳希望明天的天氣怎麼樣呢？",
+    media: {
+      type: "image",
+      src: "5.JPG",
+    },
+    choices: [
+      {
+        text: "晴天",
+        nextStage: "5.1",
+      },
+      {
+        text: "下雨",
+        nextStage: "5.2",
+      },
+    ],
+  },
+  // 做蛋糕或是放羊
+  5.1: {
+    id: "5.1",
+    title: "晴天",
+    content: "這是妳第一次擠羊奶，羊真的是很瘋狂的一個生物，到處亂踢得好可怕。但最後如果擠出很多的話還是會很開心。工作結束後你想要做什麼呢？",
+    media: {
+      type: "video",
+      src: "5.1.MP4",
+    },
+    choices: [
+      {
+        text: "去海邊走走",
+        nextStage: "6.1",
+      },
+      {
+        text: "去散步",
+        nextStage: "6.2",
+      },
+    ],
+  },
+  5.2: {
+    id: "5.2",
+    title: "下雨",
+    content: "Kai 教你們做了德國的麵包，這是你第一次做麵包，發現做麵包用手攪拌的話手很酸。(麵包超硬)，工作結束後放晴了，你想要做什麼呢？",
+    media: {
+      type: "image",
+      src: "5.2.JPG",
+    },
+    choices: [
+      {
+        text: "去海邊走走",
+        nextStage: "6.1",
+      },
+      {
+        text: "去散步",
+        nextStage: "6.2",
+      },
+    ],
+  },
+  6.1: {
+    id: "6.1",
+    title: "去海邊走走",
+    content: "走得時候太匆忙，什麼都沒有帶到。結果去超市買了沙灘巾跟泳衣泳褲！好險海很漂亮，曬日光浴真開心！",
+    media: {
+      type: "image",
+      src: "6.1.JPG",
+    },
+    choices: [
+      {
+        text: "跟大家說掰掰",
+        nextStage: "7",
+      },
+    ],
+  },
+  6.2: {
+    id: "6.2",
+    title: "去散步",
+    content: "你們跟兩個小孩一起去散步，兩個小孩很可愛，一直說著法文，你們也說著法文，雖然聽不懂，但還是聊得很開心。",
+    media: {
+      type: "video",
+      src: "6.2.MP4",
+    },
+    choices: [
+      {
+        text: "跟大家說掰掰",
+        nextStage: "7",
+      },
+    ],
+  },
+  // 7: {
+  //   id: "7",
+  //   title: "跟大家說掰掰",
+  //   content: "雖然在這裡只待了三個禮拜，但妳認為在這個地方感覺上過了好久。工作很辛苦、與小孩的相處也很開心，一起做了很多。他們也帶我們去好多地方玩。這就是你們旅程的第一站。你們很捨不得小朋友跟 Lea，但是他們永遠都會在你的回憶裡。他們帶給了你們很多回憶，希望妳可以帶著他們的祝福，繼續旅程。",
+  //   media: {
+  //     type: "video",
+  //     src: "7.MP4",
+  //   },
+  //   choices: [
+  //     {
+  //       text: "",
+  //       nextStage: "8",
+  //     },
+  //   ],
+  // },
 };
 
 /**
@@ -225,5 +360,5 @@ export function getStage(stageId) {
  * @returns {string} 起始關卡 ID
  */
 export function getStartStage() {
-  return "4";
+  return "5";
 }
