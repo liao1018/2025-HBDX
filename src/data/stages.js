@@ -360,5 +360,5 @@ export function getStage(stageId) {
  * @returns {string} 起始關卡 ID
  */
 export function getStartStage() {
-  return "5";
+  return "1";
 }
