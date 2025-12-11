@@ -515,5 +515,5 @@ export function getStage(stageId) {
  * @returns {string} 起始關卡 ID
  */
 export function getStartStage() {
-  return "1";
+  return "0";
 }
