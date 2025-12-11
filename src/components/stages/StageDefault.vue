@@ -159,12 +159,12 @@ watch(
           :class="showContent ? 'opacity-100' : 'opacity-0'"
         >
           <!-- 關卡標題 -->
-          <h1 class="bg-white/95 backdrop-blur rounded-lg shadow-lg p-6 mb-2 text-lg font-bold text-gray-800 text-center">
+          <h1 class="bg-white/95 backdrop-blur rounded-lg shadow-lg p-4 mb-2 text-lg font-bold text-gray-800 text-center">
             {{ stage?.title }}
           </h1>
 
           <!-- 關卡內容 -->
-          <div class="bg-white/95 backdrop-blur rounded-lg shadow-lg p-6 mb-2">
+          <div class="bg-white/95 backdrop-blur rounded-lg shadow-lg px-6 py-4 mb-2">
             <p class="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
               {{ stage?.content }}
             </p>
