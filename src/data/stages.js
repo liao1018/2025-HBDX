@@ -503,7 +503,7 @@ export const stages = {
     choices: [
       {
         text: "去波爾多玩囉！",
-        nextStage: "11",
+        nextStage: "100",
       },
     ],
   },
